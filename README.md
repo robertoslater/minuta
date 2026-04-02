@@ -265,10 +265,4 @@ minuta/
 
 MIT — see [LICENSE](LICENSE) for details.
 
-Pro features are available via [Minuta Pro](https://morovision.ch/minuta).
-
----
-
-<p align="center">
-  Built with care by <a href="https://morovision.ch">Moro Vision GmbH</a>, Dornach, Switzerland
-</p>
+Pro features are available via [Minuta Pro](https://minuta.morovision.ch).

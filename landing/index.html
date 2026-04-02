@@ -76,7 +76,7 @@ nav {
   display: flex; align-items: center; justify-content: space-between;
 }
 .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-brand img { height: 32px; width: 32px; }
+.nav-brand img { height: 32px; width: auto; object-fit: contain; }
 .nav-brand-text { font-weight: 600; font-size: 1.1rem; color: var(--clr-white); }
 .nav-brand-text span { color: var(--clr-accent); }
 .nav-right { display: flex; align-items: center; gap: 16px; }
@@ -301,7 +301,7 @@ footer {
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
 }
 .footer-brand { display: flex; align-items: center; gap: 10px; }
-.footer-brand img { height: 24px; width: 24px; }
+.footer-brand img { height: 24px; width: auto; object-fit: contain; }
 .footer-brand span { font-weight: 600; font-size: 0.9rem; color: var(--clr-white); }
 .footer-text { font-size: 0.8rem; color: var(--clr-text-muted); }
 .footer-links { display: flex; gap: 24px; }
@@ -333,7 +333,7 @@ footer {
   <div class="nav-inner">
     <a href="#" class="nav-brand">
       <img src="/logo.png" alt="Minuta">
-      <span class="nav-brand-text">Meeting<span>Scribe</span></span>
+      <span class="nav-brand-text">minu<span>ta</span></span>
     </a>
     <div class="nav-right">
       <div class="theme-toggle" onclick="toggleTheme()" role="button" aria-label="Theme wechseln">
@@ -455,7 +455,7 @@ footer {
         </div>
         <h3>Webhook & Notion Integration</h3>
         <p>Webhook sendet Zusammenfassungen direkt an deinen Workflow. Automatisch in Notion ablegen oder per API weiterverarbeiten.</p>
-        <span class="feature-tag">Webhook API</span>
+        <span class="feature-tag" style="background: rgba(234,179,8,0.15); color: #EAB308;">Pro Feature</span>
       </div>
 
       <div class="feature-card reveal">
@@ -562,8 +562,8 @@ footer {
           <tr>
             <td>Preis / Monat</td>
             <td class="highlight-col" style="color: var(--clr-accent); font-weight: 600;">0 CHF*</td>
-            <td>$19</td>
-            <td>CHF 20</td>
+            <td>ab $14</td>
+            <td>ab &euro;30</td>
             <td>$16.99</td>
           </tr>
         </tbody>
