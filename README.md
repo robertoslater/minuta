@@ -59,7 +59,6 @@ After the meeting, Minuta generates a structured AI summary with key points, act
 - **Neo4J / LightRAG** — Index meeting knowledge in your graph database.
 - **CSV / PDF Export** — Export transcripts and summaries in multiple formats.
 - **Auto-Summary** — Automatically summarize when recording stops.
-- **Priority Support** — Direct email support.
 
 ## How It Works
 
@@ -68,29 +67,6 @@ After the meeting, Minuta generates a structured AI summary with key points, act
 2. Live Transcription →  Audio captured locally, transcribed via MLX Whisper
 3. AI Summary         →  GPT-4o / Ollama generates structured meeting notes
 4. Export             →  Send to Notion, N8N, or download as Markdown (Pro)
-```
-
-### Architecture
-
-```
-+-----------------+    Unix Socket      +--------------------------+
-|  Minuta.app     | -----------------> |  Python Backend (FastAPI) |
-|  (Swift CLI)    |   PCM Audio 48kHz  |  localhost:8741           |
-|                 |                    |                           |
-|  AVAudioEngine  |                    |  Resample 48kHz -> 16kHz  |
-|  (Microphone)   |                    |  Voice Detection (RMS)    |
-|  ScreenCapture  |                    |  MLX Whisper (local)      |
-|  Kit (System)   |                    |  LLM Summary (Azure/      |
-+-----------------+                    |    Ollama/Langdock)       |
-                                       |  SQLite Database          |
-+-----------------+  HTTP + WebSocket  |  Webhook Sender           |
-| Next.js Frontend| <---------------> |                           |
-| localhost:3100  |                    +--------------------------+
-|                 |
-| Live Transcript |         +--------------------------+
-| Meeting Archive | ------> |  N8N -> Notion -> Neo4J  |
-| Summary Editor  | Webhook |  (Pro)                   |
-+-----------------+         +--------------------------+
 ```
 
 ## Installation
@@ -223,7 +199,6 @@ Minuta is free and open source for local use. **Minuta Pro** unlocks integration
 | Notion export | — | :white_check_mark: |
 | CSV / PDF export | — | :white_check_mark: |
 | Auto-summary | — | :white_check_mark: |
-| Priority support | — | :white_check_mark: |
 
 ### Pricing
 

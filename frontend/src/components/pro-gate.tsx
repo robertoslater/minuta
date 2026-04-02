@@ -157,7 +157,6 @@ function UpgradeDialog({
                 <li>&#10003; Notion & Neo4J Export</li>
                 <li>&#10003; Auto-Zusammenfassung</li>
                 <li>&#10003; CSV / PDF Export</li>
-                <li>&#10003; Priority Support</li>
               </ul>
             </CardContent>
           </Card>
