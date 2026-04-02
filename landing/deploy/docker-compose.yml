@@ -1,7 +1,7 @@
 services:
   minuta-landing:
     build:
-      context: .
+      context: ./minuta-landing
       dockerfile: Dockerfile
     container_name: minuta-landing
     restart: unless-stopped
