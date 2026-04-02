@@ -54,9 +54,8 @@ After the meeting, Minuta generates a structured AI summary with key points, act
 
 ### Pro
 
-- **Webhook / N8N Integration** — Send summaries to your automation workflows.
+- **Webhook Integration** — Send summaries to any automation workflow via HTTP webhook.
 - **Notion Export** — Automatically create structured Notion pages from meetings.
-- **Neo4J / LightRAG** — Index meeting knowledge in your graph database.
 - **CSV / PDF Export** — Export transcripts and summaries in multiple formats.
 - **Auto-Summary** — Automatically summarize when recording stops.
 
@@ -66,7 +65,7 @@ After the meeting, Minuta generates a structured AI summary with key points, act
 1. Start Recording    →  Click "Start Recording" in the dashboard
 2. Live Transcription →  Audio captured locally, transcribed via MLX Whisper
 3. AI Summary         →  GPT-4o / Ollama generates structured meeting notes
-4. Export             →  Send to Notion, N8N, or download as Markdown (Pro)
+4. Export             →  Send via webhook to Notion, or download as Markdown (Pro)
 ```
 
 ## Installation
@@ -140,7 +139,7 @@ model = "llama3.2:8b"
 
 [webhook]
 enabled = true               # Pro feature
-url = "https://your-n8n.com/webhook/..."
+url = "https://your-webhook-endpoint.com/..."
 basic_auth_user = "user"
 basic_auth_password = "pass"
 
@@ -182,7 +181,7 @@ minuta config      # Edit config in $EDITOR
 | `POST` | `/api/meetings/{id}/stop` | Stop recording |
 | `POST` | `/api/meetings/{id}/summarize` | Generate AI summary |
 | `PUT` | `/api/meetings/{id}/summary` | Edit summary |
-| `POST` | `/api/meetings/{id}/webhook` | Send to N8N (Pro) |
+| `POST` | `/api/meetings/{id}/webhook` | Send via webhook (Pro) |
 | `WS` | `/ws/transcript/{id}` | Live transcript stream |
 
 ## Pro
@@ -195,7 +194,7 @@ Minuta is free and open source for local use. **Minuta Pro** unlocks integration
 | AI summary (own API key) | :white_check_mark: | :white_check_mark: |
 | Live dashboard | :white_check_mark: | :white_check_mark: |
 | Edit meetings & summaries | :white_check_mark: | :white_check_mark: |
-| Webhook / N8N | — | :white_check_mark: |
+| Webhook integration | — | :white_check_mark: |
 | Notion export | — | :white_check_mark: |
 | CSV / PDF export | — | :white_check_mark: |
 | Auto-summary | — | :white_check_mark: |

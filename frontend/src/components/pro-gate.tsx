@@ -153,8 +153,8 @@ function UpgradeDialog({
                 Early Bird Lifetime: CHF 149 (erste 100 Kaeufe)
               </div>
               <ul className="text-xs text-muted-foreground space-y-1">
-                <li>&#10003; Webhook / N8N Integration</li>
-                <li>&#10003; Notion & Neo4J Export</li>
+                <li>&#10003; Webhook Integration</li>
+                <li>&#10003; Notion Export</li>
                 <li>&#10003; Auto-Zusammenfassung</li>
                 <li>&#10003; CSV / PDF Export</li>
               </ul>

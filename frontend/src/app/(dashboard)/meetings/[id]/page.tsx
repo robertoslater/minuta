@@ -202,7 +202,7 @@ export default function MeetingDetailPage() {
             </Button>
           )}
           <ProButton
-            feature="Webhook / N8N Integration"
+            feature="Webhook Integration"
             variant="outline"
             onClick={handleWebhook}
             disabled={webhookSent || sendingWebhook || meeting.webhook_sent}
