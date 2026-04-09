@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import threading
 import time
 import uuid
 from collections import deque
@@ -29,6 +30,7 @@ class Transcriber:
             sample_rate=settings.audio.sample_rate,
         )
         self._whisper_model = None
+        self._whisper_lock = threading.Lock()  # Serialize MLX GPU access
         self._sample_rate = settings.audio.sample_rate
 
         # Audio buffers per source
@@ -169,20 +171,23 @@ class Transcriber:
     def _transcribe(
         self, audio: np.ndarray, source: str, start_time: float, end_time: float
     ) -> TranscriptSegment | None:
-        """Run MLX Whisper inference (blocking, runs in thread)."""
+        """Run MLX Whisper inference (blocking, runs in thread).
+
+        Uses a lock to serialize GPU access — MLX Metal crashes if two
+        threads call eval() concurrently on the same GPU.
+        """
         if self._whisper_model is None:
             return None
 
         import mlx_whisper
 
         try:
-            result = mlx_whisper.transcribe(
-                audio,
-                path_or_hf_repo=self._whisper_model,
-                language=self.settings.transcription.language,
-                # MLX Whisper only supports greedy decoding (beam_size=1)
-
-            )
+            with self._whisper_lock:
+                result = mlx_whisper.transcribe(
+                    audio,
+                    path_or_hf_repo=self._whisper_model,
+                    language=self.settings.transcription.language,
+                )
 
             text = result.get("text", "").strip()
             if not text:
