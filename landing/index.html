@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="de-CH" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minuta — Lokale Meeting-Transkription & KI-Zusammenfassung | Moro Vision</title>
+<meta name="description" content="Minuta transkribiert Meetings lokal auf deinem Mac. Kein Audio verlässt dein Gerät. DSGVO-konform. KI-Zusammenfassungen mit Azure OpenAI. Webhook & Notion Integration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+/* ============================================
+   Minuta Landing Page
+   Moro Vision Corporate Design v2.0
+   ============================================ */
+
+:root {
+  --clr-bg: #0B0F14;
+  --clr-surface: #131920;
+  --clr-surface-2: #1A2230;
+  --clr-border: #243044;
+  --clr-text: #E2E8F0;
+  --clr-text-muted: #8B9BB4;
+  --clr-white: #FFFFFF;
+  --clr-accent: #22C55E;
+  --clr-accent-dark: #16A34A;
+  --clr-accent-glow: rgba(34,197,94,0.15);
+  --clr-on-accent: #0B0F14;
+  --clr-nav-bg: rgba(11,15,20,0.85);
+  --clr-terminal: #0D1117;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="light"] {
+  --clr-bg: #F2F2F2;
+  --clr-surface: #FFFFFF;
+  --clr-surface-2: #E6E9EC;
+  --clr-border: #C8CDD3;
+  --clr-text: #545655;
+  --clr-text-muted: #6B7280;
+  --clr-white: #39914A;
+  --clr-accent: #22C55E;
+  --clr-accent-dark: #16A34A;
+  --clr-accent-glow: rgba(34,197,94,0.08);
+  --clr-on-accent: #FFFFFF;
+  --clr-nav-bg: rgba(242,242,242,0.9);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- NAV --- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 64px; z-index: 100;
+  background: var(--clr-nav-bg);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--clr-border);
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-inner {
+  max-width: 1140px; width: 100%; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-brand img { height: 32px; width: auto; object-fit: contain; }
+.nav-brand-text { font-weight: 600; font-size: 1.1rem; color: var(--clr-white); }
+.nav-brand-text span { color: var(--clr-accent); }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.theme-toggle {
+  width: 44px; height: 24px; border-radius: 20px; padding: 3px;
+  background: var(--clr-surface-2); border: 1px solid var(--clr-border);
+  cursor: pointer; position: relative; transition: all .3s;
+}
+.toggle-thumb {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--clr-accent); transition: transform .3s;
+}
+[data-theme="light"] .toggle-thumb { transform: translateX(20px); }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; border-radius: 10px; font-weight: 600;
+  font-size: 0.9rem; text-decoration: none; transition: all .2s;
+  border: none; cursor: pointer; font-family: var(--font-body);
+}
+.btn-primary {
+  background: var(--clr-accent); color: var(--clr-on-accent);
+}
+.btn-primary:hover { background: var(--clr-accent-dark); transform: translateY(-1px); }
+.btn-secondary {
+  background: transparent; color: var(--clr-text);
+  border: 1px solid var(--clr-border);
+}
+.btn-secondary:hover { border-color: var(--clr-accent); color: var(--clr-accent); }
+.btn-nav { padding: 8px 20px; font-size: 0.85rem; }
+
+/* --- SECTIONS --- */
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+section { padding: 80px 0; }
+
+/* --- HERO --- */
+.hero {
+  padding-top: 140px; padding-bottom: 80px;
+  position: relative; overflow: hidden; text-align: center;
+}
+.hero::before {
+  content: ''; position: absolute; top: -200px; right: -100px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, var(--clr-accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
+  background: var(--clr-accent-glow); border: 1px solid rgba(34,197,94,0.2);
+  font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500;
+  color: var(--clr-accent);
+}
+.hero-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--clr-accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 700;
+  color: var(--clr-white); letter-spacing: -0.03em;
+  line-height: 1.1; margin-bottom: 20px;
+}
+.hero h1 .accent { color: var(--clr-accent); }
+.hero .subtitle {
+  font-size: 1.15rem; color: var(--clr-text-muted); max-width: 600px;
+  margin: 0 auto 32px; line-height: 1.75;
+}
+.hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* --- TERMINAL PREVIEW --- */
+.terminal-wrapper {
+  max-width: 700px; margin: 48px auto 0; position: relative;
+}
+.terminal {
+  background: var(--clr-terminal); border-radius: 12px;
+  border: 1px solid var(--clr-border); overflow: hidden;
+  text-align: left;
+}
+.terminal-header {
+  padding: 12px 16px; display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--clr-border);
+}
+.terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+.terminal-dot.r { background: #FF5F57; }
+.terminal-dot.y { background: #FEBC2E; }
+.terminal-dot.g { background: #28C840; }
+.terminal-title {
+  flex: 1; text-align: center; font-family: var(--font-mono);
+  font-size: 0.75rem; color: var(--clr-text-muted);
+}
+.terminal-body {
+  padding: 20px; font-family: var(--font-mono); font-size: 0.82rem;
+  line-height: 1.8; color: #8B9BB4;
+}
+.terminal-body .green { color: var(--clr-accent); }
+.terminal-body .white { color: #E2E8F0; }
+.terminal-body .muted { color: #546178; }
+
+/* --- PROOF BAR --- */
+.proof-bar {
+  border-top: 1px solid var(--clr-border);
+  border-bottom: 1px solid var(--clr-border);
+  padding: 32px 0;
+}
+.proof-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  text-align: center;
+}
+.proof-item .number {
+  font-family: var(--font-mono); font-size: 1.8rem; font-weight: 600;
+  color: var(--clr-white);
+}
+.proof-item .label {
+  font-size: 0.85rem; color: var(--clr-text-muted); margin-top: 4px;
+}
+
+/* --- FEATURES --- */
+.section-label {
+  font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--clr-accent);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 700;
+  color: var(--clr-white); letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.section-subtitle {
+  font-size: 1rem; color: var(--clr-text-muted); max-width: 600px;
+  margin-bottom: 48px;
+}
+.features-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.feature-card {
+  background: var(--clr-surface); border: 1px solid var(--clr-border);
+  border-radius: 12px; padding: 28px; transition: all .2s;
+}
+.feature-card:hover {
+  border-color: var(--clr-accent); transform: translateY(-3px);
+}
+.feature-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: var(--clr-accent-glow); display: flex;
+  align-items: center; justify-content: center; margin-bottom: 16px;
+}
+.feature-icon svg { width: 22px; height: 22px; stroke: var(--clr-accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.feature-card h3 {
+  font-size: 1.05rem; font-weight: 600; color: var(--clr-white); margin-bottom: 8px;
+}
+.feature-card p { font-size: 0.88rem; color: var(--clr-text-muted); line-height: 1.65; }
+.feature-tag {
+  display: inline-block; margin-top: 12px; padding: 3px 10px; border-radius: 8px;
+  font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  background: var(--clr-accent-glow); color: var(--clr-accent);
+}
+
+/* --- HOW IT WORKS --- */
+.steps-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 32px; counter-reset: step;
+}
+.step { position: relative; }
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--clr-accent); color: var(--clr-on-accent);
+  font-family: var(--font-mono); font-weight: 600; font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+.step h3 { font-size: 1rem; font-weight: 600; color: var(--clr-white); margin-bottom: 8px; }
+.step p { font-size: 0.88rem; color: var(--clr-text-muted); line-height: 1.65; }
+
+/* --- COMPARISON --- */
+.comparison-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--clr-surface); border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--clr-border);
+}
+.comparison-table th, .comparison-table td {
+  padding: 14px 20px; text-align: left; font-size: 0.9rem;
+  border-bottom: 1px solid var(--clr-border);
+}
+.comparison-table th {
+  background: var(--clr-surface-2); font-weight: 600;
+  color: var(--clr-white); font-size: 0.85rem;
+}
+.comparison-table td { color: var(--clr-text); }
+.comparison-table td:first-child { font-weight: 500; color: var(--clr-white); }
+.check { color: var(--clr-accent); font-weight: 700; }
+.cross { color: #EF4444; }
+.highlight-col { background: var(--clr-accent-glow); }
+
+/* --- CTA --- */
+.cta-section {
+  text-align: center; position: relative; padding: 100px 0;
+}
+.cta-section::before {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, var(--clr-accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700;
+  color: var(--clr-white); letter-spacing: -0.02em; margin-bottom: 16px;
+  position: relative;
+}
+.cta-section p {
+  font-size: 1.05rem; color: var(--clr-text-muted); margin-bottom: 32px;
+  max-width: 500px; margin-left: auto; margin-right: auto; position: relative;
+}
+
+/* --- FOOTER --- */
+footer {
+  border-top: 1px solid var(--clr-border); padding: 40px 0;
+}
+.footer-inner {
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+}
+.footer-brand { display: flex; align-items: center; gap: 10px; }
+.footer-brand img { height: 24px; width: auto; object-fit: contain; }
+.footer-brand span { font-weight: 600; font-size: 0.9rem; color: var(--clr-white); }
+.footer-text { font-size: 0.8rem; color: var(--clr-text-muted); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  font-size: 0.85rem; color: var(--clr-text-muted); text-decoration: none;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--clr-accent); }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .proof-grid { grid-template-columns: repeat(2, 1fr); }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; text-align: center; }
+  .comparison-table { font-size: 0.8rem; }
+  .comparison-table th, .comparison-table td { padding: 10px 12px; }
+}
+
+/* --- SCROLL REVEAL --- */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <img src="/logo.png" alt="Minuta">
+      <span class="nav-brand-text">minu<span>ta</span></span>
+    </a>
+    <div class="nav-right">
+      <div class="theme-toggle" onclick="toggleTheme()" role="button" aria-label="Theme wechseln">
+        <div class="toggle-thumb"></div>
+      </div>
+      <a href="#cta" class="btn btn-primary btn-nav">Download &rarr;</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span class="dot"></span> Für macOS Apple Silicon</div>
+    <h1>Meetings transkribieren.<br><span class="accent">100% lokal.</span></h1>
+    <p class="subtitle">
+      Minuta erfasst dein Meeting-Audio direkt auf deinem Mac, transkribiert in Echtzeit
+      mit lokaler KI und erstellt strukturierte Zusammenfassungen. Kein Audio verlässt dein Gerät.
+    </p>
+    <div class="hero-cta">
+      <a href="#cta" class="btn btn-primary">Kostenlos testen &rarr;</a>
+      <a href="#features" class="btn btn-secondary">Features entdecken</a>
+    </div>
+
+    <!-- Terminal Preview -->
+    <div class="terminal-wrapper reveal">
+      <div class="terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot r"></div>
+          <div class="terminal-dot y"></div>
+          <div class="terminal-dot g"></div>
+          <span class="terminal-title">Minuta — Live Transkript</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="muted">[00:03]</span> <span class="green">Ich:</span> <span class="white">Willkommen zum Sprint Review. Lasst uns die Ergebnisse durchgehen.</span></div>
+          <div><span class="muted">[00:08]</span> <span class="green">Teilnehmer:</span> <span class="white">Die neue API ist deployed und performt stabil unter Last.</span></div>
+          <div><span class="muted">[00:15]</span> <span class="green">Ich:</span> <span class="white">Sehr gut. Was sind die nächsten Schritte für Q3?</span></div>
+          <div><span class="muted">[00:22]</span> <span class="green">Teilnehmer:</span> <span class="white">Wir fokussieren auf die Mobile-App und das Dashboard Redesign.</span></div>
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #243044;">
+            <span class="green">&#x2713; Zusammenfassung generiert</span> <span class="muted">— azure/gpt-4o, 2.3s, 477 Tokens</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<section class="proof-bar">
+  <div class="container">
+    <div class="proof-grid">
+      <div class="proof-item">
+        <div class="number">100%</div>
+        <div class="label">Lokale Transkription</div>
+      </div>
+      <div class="proof-item">
+        <div class="number">&lt;3s</div>
+        <div class="label">Latenz pro Segment</div>
+      </div>
+      <div class="proof-item">
+        <div class="number">DSGVO</div>
+        <div class="label">Konform by Design</div>
+      </div>
+      <div class="proof-item">
+        <div class="number">0 CHF</div>
+        <div class="label">Für lokale Nutzung</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Alles was du für Meeting-Protokolle brauchst</h2>
+    <p class="section-subtitle">Von der Audioerfassung bis zur Notion-Integration — in einem Tool.</p>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <h3>Lokale Audioerfassung</h3>
+        <p>Erfasst Mikrofon und System-Audio gleichzeitig. Funktioniert mit Zoom, Teams, Meet — ohne Meeting-Bot.</p>
+        <span class="feature-tag">Apple Silicon optimiert</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>Echtzeit-Transkription</h3>
+        <p>MLX Whisper läuft lokal auf der Neural Engine deines M1/M2/M3. Kein Audio wird in die Cloud gesendet.</p>
+        <span class="feature-tag">100% offline</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h3>KI-Zusammenfassung</h3>
+        <p>Strukturierte Zusammenfassungen mit Hauptpunkten, Action Items und Entscheidungen. Via Azure OpenAI oder lokal mit Ollama.</p>
+        <span class="feature-tag">GPT-4o / Ollama</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>DSGVO / nDSG konform</h3>
+        <p>Audio wird nie gespeichert oder übertragen. Transkription läuft komplett auf deinem Gerät. Perfekt für sensible Meetings.</p>
+        <span class="feature-tag">Privacy first</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3>Webhook & Notion Integration</h3>
+        <p>Webhook sendet Zusammenfassungen direkt an deinen Workflow. Automatisch in Notion ablegen oder per API weiterverarbeiten.</p>
+        <span class="feature-tag" style="background: rgba(234,179,8,0.15); color: #EAB308;">Pro Feature</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>Live Dashboard</h3>
+        <p>Web-Dashboard mit Echtzeit-Transkript, Meeting-Archiv, editierbaren Zusammenfassungen und Webhook-Trigger.</p>
+        <span class="feature-tag">Next.js</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background: var(--clr-surface);">
+  <div class="container">
+    <div class="section-label">So funktioniert's</div>
+    <h2 class="section-title">In 4 Schritten zum Meeting-Protokoll</h2>
+    <p class="section-subtitle">Kein Setup, kein Account, keine Cloud. Einfach starten.</p>
+
+    <div class="steps-grid">
+      <div class="step reveal">
+        <h3>Aufnahme starten</h3>
+        <p>Klicke im Dashboard auf "Aufnahme starten". Minuta erfasst Mikrofon und System-Audio automatisch.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Live transkribieren</h3>
+        <p>Sieh das Transkript in Echtzeit im Browser. Sprecher werden automatisch unterschieden (Ich vs. Teilnehmer).</p>
+      </div>
+      <div class="step reveal">
+        <h3>Zusammenfassen</h3>
+        <p>Nach dem Meeting generiert GPT-4o oder ein lokales LLM eine strukturierte Zusammenfassung mit Action Items.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Exportieren</h3>
+        <p>Per Webhook versenden. Automatisch in Notion ablegen, weiterverarbeiten oder per E-Mail verteilen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section>
+  <div class="container">
+    <div class="section-label">Vergleich</div>
+    <h2 class="section-title">Warum Minuta?</h2>
+    <p class="section-subtitle">Im Vergleich zu Cloud-basierten Alternativen.</p>
+
+    <div class="reveal">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="highlight-col">Minuta</th>
+            <th>Granola</th>
+            <th>Bliro</th>
+            <th>Otter.ai</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Lokale Transkription</td>
+            <td class="highlight-col"><span class="check">&#10003;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Audio verlässt Gerät nicht</td>
+            <td class="highlight-col"><span class="check">&#10003;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Eigenes LLM möglich</td>
+            <td class="highlight-col"><span class="check">&#10003;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Webhook / API <span style="font-family: var(--font-mono); font-size: 0.65rem; background: rgba(234,179,8,0.15); color: #EAB308; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">PRO</span></td>
+            <td class="highlight-col"><span class="check">&#10003;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="check">&#10003;</span></td>
+            <td><span class="check">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Notion Integration <span style="font-family: var(--font-mono); font-size: 0.65rem; background: rgba(234,179,8,0.15); color: #EAB308; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">PRO</span></td>
+            <td class="highlight-col"><span class="check">&#10003;</span></td>
+            <td><span class="check">&#10003;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Open Source</td>
+            <td class="highlight-col"><span class="check">&#10003;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+            <td><span class="cross">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Preis / Monat</td>
+            <td class="highlight-col" style="color: var(--clr-accent); font-weight: 600;">0 CHF*</td>
+            <td>ab $14</td>
+            <td>ab &euro;30</td>
+            <td>$16.99</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size: 0.75rem; color: var(--clr-text-muted); margin-top: 8px;">* Kostenlos für lokale Nutzung. Cloud-LLM Kosten (Azure OpenAI) werden separat nach Verbrauch berechnet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section style="background: var(--clr-surface);">
+  <div class="container">
+    <div class="section-label">Tech Stack</div>
+    <h2 class="section-title">Gebaut für Performance</h2>
+    <p class="section-subtitle">Optimiert für Apple Silicon mit modernsten Technologien.</p>
+
+    <div class="features-grid">
+      <div class="feature-card reveal" style="border-left: 3px solid var(--clr-accent);">
+        <h3>Audio Capture</h3>
+        <p>Swift CLI mit ScreenCaptureKit und AVAudioEngine. Native macOS Integration ohne Drittanbieter-Treiber.</p>
+      </div>
+      <div class="feature-card reveal" style="border-left: 3px solid var(--clr-accent);">
+        <h3>MLX Whisper</h3>
+        <p>Apples MLX Framework für lokale Whisper-Inferenz. Nutzt Neural Engine und Metal GPU auf M1/M2/M3/M4.</p>
+      </div>
+      <div class="feature-card reveal" style="border-left: 3px solid var(--clr-accent);">
+        <h3>FastAPI Backend</h3>
+        <p>Python Backend mit async SQLite, WebSocket Broadcasting und konfigurierbaren LLM-Providern.</p>
+      </div>
+      <div class="feature-card reveal" style="border-left: 3px solid var(--clr-accent);">
+        <h3>Next.js 16 Frontend</h3>
+        <p>React 19 mit shadcn/ui, Tailwind CSS v4, Lucide Icons. Moro Vision Green Theme.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <h2>Bereit für bessere<br>Meeting-Protokolle?</h2>
+    <p>Installiere Minuta in 5 Minuten auf deinem Mac. Open Source, kostenlos, DSGVO-konform.</p>
+    <div class="hero-cta" style="position: relative;">
+      <a href="https://github.com/robertoslater/minuta" class="btn btn-primary">GitHub Repository &rarr;</a>
+      <a href="mailto:info@morovision.ch" class="btn btn-secondary">Kontakt aufnehmen</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="/logo.png" alt="Moro Vision">
+        <span>Moro Vision GmbH</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://morovision.ch">morovision.ch</a>
+        <a href="https://github.com/robertoslater/minuta">GitHub</a>
+        <a href="mailto:info@morovision.ch">Kontakt</a>
+      </div>
+      <div class="footer-text">&copy; 2026 Moro Vision GmbH, Dornach</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Theme Toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? '' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('mv-theme', next);
+}
+(function() {
+  const saved = localStorage.getItem('mv-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
+// Scroll Reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

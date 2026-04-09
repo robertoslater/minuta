@@ -1,0 +1,64 @@
+[general]
+language = "de"
+locale = "de-CH"
+data_dir = "~/.minuta"
+log_level = "info"
+
+[server]
+host = "127.0.0.1"
+port = 8741
+
+[audio]
+system_audio = true
+microphone = true
+microphone_device = ""       # Empty = default mic
+sample_rate = 16000
+socket_path = "/tmp/minuta.sock"
+
+[transcription]
+model = "mlx-community/whisper-large-v3-mlx"
+model_dir = "~/.minuta/models"
+language = "de"
+vad_threshold = 0.5
+silence_duration_ms = 800
+max_segment_seconds = 30
+beam_size = 5
+
+[summarization]
+default_provider = "ollama"  # ollama | azure | langdock
+
+[summarization.ollama]
+base_url = "http://localhost:11434"
+model = "llama3.2:8b"
+timeout_seconds = 120
+
+[summarization.azure]
+endpoint = ""                # https://your-resource.openai.azure.com
+api_key = ""
+deployment = "gpt-4o"
+api_version = "2024-10-21"
+timeout_seconds = 60
+
+[summarization.langdock]
+base_url = ""                # https://api.langdock.com
+api_key = ""
+model = "gpt-4o"
+timeout_seconds = 60
+
+[webhook]
+enabled = false
+url = ""                     # N8N webhook URL
+secret = ""                  # HMAC-SHA256 shared secret
+timeout_seconds = 30
+retry_count = 3
+events = ["meeting_completed"]
+include_transcript = true
+include_summary = true
+
+[tray]
+show_duration = true
+auto_open_dashboard = false
+
+[speaker]
+user_name = "Ich"
+participant_name = "Teilnehmer"
